@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio</title>
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: #121212;
+            color: #fff;
+            overflow-x: hidden;
+            font-size: 16px;
+            transition: background-color 0.6s ease-in-out;
+        }
+
+        /* Creative Gradient Background */
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(135deg, #000000, #4b0082); /* Starting gradient */
+            background-size: 200% 200%;
+            transition: background 2s ease-in-out; /* Smooth transition for color change */
+            will-change: background;
+        }
+
+        /* Blurred Navbar (Glassmorphism) */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(25px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            z-index: 1000;
+            transition: background 0.4s ease-in-out, transform 0.4s ease-in-out;
+        }
+
+        .navbar a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 18px;
+            margin: 0 20px;
+            padding: 8px 16px;
+            border-radius: 5px;
+            transition: color 0.4s ease, transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .navbar a:hover {
+            color: #00f7ff;
+            transform: scale(1.1);
+            box-shadow: 0 0 15px #00f7ff;
+        }
+
+        .menu-btn {
+            display: none;
+            font-size: 28px;
+            cursor: pointer;
+        }
+
+        /* Sections */
+        .section {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 60px 20px;
+            transition: all 0.6s ease-in-out;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            text-shadow: 0 0 25px #00f7ff;
+            margin-bottom: 20px;
+            font-weight: 600;
+            transition: transform 0.4s ease-out;
+        }
+
+        p {
+            font-size: 1.4rem;
+            margin-top: 10px;
+            font-weight: 300;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        /* Profile Picture */
+        .profile-img {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 5px solid #fff; /* White border */
+            margin-bottom: 30px;
+            transition: transform 0.5s ease, box-shadow 0.5s ease;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.7); /* Glowing effect */
+        }
+
+        .profile-img:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px rgba(255, 255, 255, 1); /* Stronger glowing effect on hover */
+        }
+
+        /* Typewriter Effect */
+        .typewriter {
+            font-size: 26px;
+            color: #00f7ff;
+            white-space: nowrap;
+            overflow: hidden;
+            border-right: 3px solid #00f7ff;
+            animation: typing 3s steps(20, end) 1, blink 0.6s infinite alternate;
+        }
+
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes blink {
+            50% { border-color: transparent; }
+        }
+
+        /* Projects & Education Cards (Hover Effects) */
+        .projects-container{
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            flex-wrap: wrap;
+            padding-top: 40px;
+            /*margin-top: 100px;*/
+        }
+        .c{
+        width:325px;  
+        backdrop-filter: blur(5px); /* Adjust the pixel value for desired blur intensity */
+
+  background-color: rgba(255, 255, 255, 0.5); /* Optional: Set a semi-transparent background for better visibility */
+height:500px;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+        margin: 30px;
+        padding: 5px;
+          
+        }
+        .project-card {
+            width: 320px;
+            height: 200px;
+            background-color: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            text-align: center;
+            border-radius: 12px;
+            position: relative;
+            opacity: 0;
+            transform: translateY(60px);
+            transition: transform 0.5s ease, box-shadow 0.5s ease;
+        }
+        .project-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 0 25px #00f7ff;
+        }
+
+        .project-card.show, .edu-card.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Skills Section */
+        .skills-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            padding-top: 50px;
+        }
+
+        .skill-card {
+            width: 80px;
+            height: 80px;
+            background-color: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .skill-card img {
+            width: 40px;
+            height: 40px;
+            transition: transform 0.3s ease;
+        }
+
+        .skill-card:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 25px rgba(0, 247, 255, 0.7);
+        }
+
+        .skill-card:hover img {
+            transform: scale(1.2);
+        }
+
+        /* Responsive Menu */
+        @media (max-width: 768px) {
+            .menu-btn {
+                display: block;
+            }
+
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                width: 100%;
+                background: rgba(0, 0, 0, 0.9);
+                padding: 20px;
+                transition: all 0.3s ease;
+            }
+
+            .nav-links.show {
+                display: flex;
+            }
+
+            .skills-container {
+                grid-template-columns: repeat(3, 1fr); /* 3 boxes per row on mobile screens */
+            }
+
+            .skill-card {
+                width: 60px;
+                height: 60px;
+            }
+
+            .skill-card img {
+                width: 35px;
+                height: 35px;
+            }
+        }
+
+        /* Desktop Layout */
+        @media (min-width: 1024px) {
+            .navbar {
+                padding: 20px 80px;
+            }
+
+            .navbar a {
+                font-size: 20px;
+                margin: 0 30px;
+            }
+
+            .profile-img {
+                width: 250px;
+                height: 250px;
+                margin-bottom: 40px;
+            }
+
+            .projects-container, .education-container{
+                gap: 60px;
+            }
+
+            .project-card, .edu-card {
+                width: 350px;
+                height: 220px;
+            }
+
+            h1 {
+                font-size: 4rem;
+            }
+
+            p {
+                font-size: 1.6rem;
+            }
+
+            .typewriter {
+                font-size: 30px;
+            }
+
+            .skills-container {
+                grid-template-columns: repeat(4, 1fr); /* 4 boxes per row on desktop */
+            }
+        }
+        
+        .ei{
+          height : 100px;
+          
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Creative Gradient Background -->
+    <div class="background"></div>
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <span class="menu-btn" onclick="toggleMenu()">☰</span>
+        <div class="nav-links">
+            <a href="#home">Home</a>
+            <a href="#about">About</a>
+            <a href="#education">Education</a>
+            <a href="#skills">Skills</a>
+            <a href="#projects">Projects</a>
+            <a href="#contact">exp</a>
+             <a href="#contact">Contact</a>
+        </div>
+    </div>
+
+    <!-- Home Section -->
+    <div id="home" class="section">
+        <div>
+            <img src="IMG_20250207_223903_828.jpg" alt="Profile Picture" class="profile-img">
+            <h1>Welcome to My Portfolio</h1>
+            <p class="typewriter">Creative Developer & Designer</p>
+        </div>
+    </div>
+
+    <!-- About Section -->
+    <div id="about" class="section">
+        <div>
+            <h1>About Me</h1>
+            <p>I’m Barshan Sarkar, a Software and Web Engineer focused on building scalable, efficient, and user-friendly applications. With expertise in both front-end and back-end technologies, I strive to create seamless, high-performance solutions. Passionate about problem-solving and continuous learning, I’m committed to developing innovative, impactful digital experiences.</p>
+        </div>
+    </div>
+<style>
+  .c img {
+    width:auto;
+    /*height:auto;*/
+  }
+  /*.c.show{
+    opacity: 1;
+transform: translateY(0);
+  }*/
+  .edu-cardd{
+    padding: 15px;
+  }
+  .edu-cardd h2 {
+    margin-bottom: 8px;
+    color: #fff;
+  }
+  .edu-cardd p{
+    color:black;
+    /*z-index: 100;*/
+  }
+  .c:hover {
+    /*transform: scaleX(1.2)*/
+    transform: translateY(-15px);
+            box-shadow: 0 0 25px #fff;
+  }
+</style>
+    <!-- Education Section -->
+    <!-- Education Section -->
+<div id="education" class="section">
+    <div>
+        <h1>Education</h1>
+        <div class="education-container">
+            <!-- First Education Card -->
+            <div class="edu-card c">
+                <img class="ei" src="Gour_Mahavidyalaya.jpg" alt="Gour Mahavidyalaya" 
+                     style="width: 100%; height: auto; border-radius: 10px;">
+                <div class="edu-cardd">
+                    <h2>BCA - Gour Mahavidyalaya</h2>
+                    <p>Completed my Bachelor's degree in Computer Applications (BCA) with a focus on 
+                        software engineering, algorithms, and data structures. Gained practical experience 
+                        in coding, problem-solving, and software development.</p>
+                </div>
+            </div>
+
+            <!-- Second Education Card -->
+            <div class="edu-card c">
+                <img class="ei" src="jncldn60717e63509c0.jpg" alt="MCA or MSC" 
+                     style="width: 100%; height: auto; border-radius: 10px;">
+                <div class="edu-cardd">
+                    <h2>DCA in JNCLD</h2>
+                    <p>
+I completed a comprehensive course in computer fundamentals, covering hardware, software, and operating systems (MS DOS & Windows). I gained expertise in Microsoft Office (Word, Excel, PowerPoint), database management (DBMS, RDBMS, MS Access), and web development (HTML, DHTML, Visual Basic).</p>
+                </div>
+            </div>
+            
+             <!-- third Education Card >
+            <div class="edu-card c">
+                <img class="ei" src="MCA_Image.jpg" alt="MCA or MSC" 
+                     style="width: 100%; height: auto; border-radius: 10px;">
+                <div class="edu-cardd">
+                    <h2>MCA/M.Sc. (Future Education)</h2>
+                    <p>Planning to pursue a Master's degree in Computer Science or Applications, 
+                        focusing on advanced software development, AI, and cloud computing.</p>
+                </div>
+            </div>-->
+        </div>
+        
+    </div>
+</div>
+
+<style>
+    /* Education Section Styles */
+    .education-container {
+        display: flex;
+        justify-content: center;
+        gap: 50px;
+        flex-wrap: wrap;
+        padding-top: 40px;
+    }
+
+    .edu-card {
+        width: 325px;
+        height: auto;
+        backdrop-filter: blur(10px); /* Glassmorphism */
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+        padding: 10px;
+        transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    .edu-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 0 20px #00f7ff;
+    }
+
+    .edu-card img {
+        width: 100%;
+        height: auto;
+        border-radius: 10px;
+    }
+
+    .edu-cardd {
+        padding: 15px;
+        text-align: center;
+    }
+
+    .edu-cardd h2 {
+        margin-bottom: 10px;
+        font-size: 1.3rem;
+        color: #fff;
+    }
+
+    .edu-cardd p {
+        font-size: 1rem;
+        color: #e0e0e0;
+        line-height: 1.4;
+    }
+
+    /* Responsive Layout */
+    @media (max-width: 768px) {
+        .education-container {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .edu-card {
+            width: 90%;
+        }
+    }
+</style>
+
+                <!--
+                <div class="c">
+                <img src="path_to_image2.jpg" alt="Web Development Course" style="width: 100%; height: auto; border-radius: 10px;">
+                <div class="edu-cardd">
+                    
+                    <h2>MCA/MSC</h2>
+                    <p>Learned full-stack web development, including HTML, CSS, JavaScript, and backend technologies. Built several projects and gained practical knowledge of the web development lifecycle.</p>
+                </div></div>
+                <div class="edu-card">
+                    <img src="path_to_image3.jpg" alt="UI/UX Design Training" style="width: 100%; height: auto; border-radius: 10px;">
+                    <h2>UI/UX Design Training</h2>
+                    <p>Completed a training program focused on user interface and user experience design, learning how to create intuitive and visually appealing designs for websites and applications.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+--->
+    <!-- Skills Section -->
+    <div id="skills" class="section">
+        <div>
+            <h1>Skills</h1>
+            <div class="skills-container">
+                <div class="skill-card"><img src="Clipped_image_20250211_185811.png" alt="Skill 1"></div>
+                <div class="skill-card"><img src="Cpplipped_image_20250211_185758.png" alt="Skill 2"></div>
+                <div class="skill-card"><img src="pyClipped_image_20250211_185042.png" alt="Skill 3"></div>
+                <div class="skill-card"><img src="1200px-PHP-logo.svg.png" alt="Skill 4"></div>
+                <div class="skill-card"><img src="2560px-Sql_data_base_with_logo.svg.png" alt="Skill 5"></div>
+                <div class="skill-card"><img src="512px-HTML5_logo_and_wordmark.svg.png" alt="Skill 6"></div>
+                <div class="skill-card"><img src="340px-CSS3_logo_and_wordmark.svg.png" alt="Skill 7"></div>
+                <div class="skill-card"><img src="jsClipped_image_20250211_185156.png" alt="Skill 8"></div>
+                <div class="skill-card"><img src="1200px-React-icon.svg.png" alt="Skill 9"></div>
+                <div class="skill-card"><img src="2560px-MongoDB_Logo.svg.png" alt="Skill 10"></div>
+                <div class="skill-card"><img src="vbClipped_image_20250212_150512.png" alt="Skill 10"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Projects Section -->
+    <div id="projects" class="section">
+        <div>
+            <h1>My Projects</h1>
+            <div class="projects-container">
+                <div class="project-card">Project 1</div>
+                <div class="project-card">Project 2</div>
+                <div class="project-card">Project 3</div>
+            </div>
+        </div>
+    </div>
+  
+  
+ <!-- Experience Section -->
+<section id="experience">
+  <div class="section-title">
+    <h2>Experience</h2>
+  </div>
+  <div class="experience-cards">
+    <div class="experience-card">
+      <div class="card-header">
+        <h3>Data Scientist</h3>
+        <p>Google | 1y</p>
+      </div>
+      <div class="card-body">
+        <p>i was data scientist in google . make research</p>
+      </div>
+    </div>
+    <div class="experience-card">
+      <div class="card-header">
+        <h3>Data Scientist</h3>
+        <p>Google | 1y</p>
+      </div>
+      <div class="card-body">
+        <p>i was data scientist in google . make research</p>
+      </div>
+    </div>
+    <div class="experience-card">
+      <div class="card-header">
+        <h3>Job Title 2</h3>
+        <p>Company Name | Duration</p>
+      </div>
+      <div class="card-body">
+        <p>Job Description and Responsibilities</p>
+      </div>
+    </div>
+    <!-- Add more cards here -->
+  </div>
+</section>
+
+<style>
+/* Default Variables */
+:root {
+  --primary-color: #00f7ff;
+  --background-color: #121212;
+  --card-hover-bg-color: rgba(255, 255, 255, 0.1);
+  --card-hover-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+  --font-color: #fff;
+  --title-font-size: 2.5rem;
+  --description-font-size: 1rem;
+  --card-padding: 20px;
+  --card-spacing: 30px;
+  --card-width: 300px;
+  --card-height: 450px;
+  --border-radius: 15px;
+  --transition-speed: 0.3s;
+}
+
+/* Experience Section Styles */
+#experience {
+  padding: 50px 20px;
+  background-color: var(--background-color);
+}
+
+.section-title h2 {
+  font-size: var(--title-font-size);
+  text-align: center;
+  margin-bottom: 30px;
+  color: var(--font-color);
+}
+
+.experience-cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--card-spacing);
+}
+
+.experience-card {
+  background-color: var(--card-hover-bg-color);
+  width: var(--card-width);
+  height: var(--card-height);
+  padding: var(--card-padding);
+  border-radius: var(--border-radius);
+  backdrop-filter: blur(10px);
+  transition: all var(--transition-speed) ease;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.experience-card:hover {
+  transform: translateY(-10px);
+  box-shadow: var(--card-hover-shadow);
+}
+
+.card-header h3 {
+  font-size: 1.8rem;
+  color: var(--font-color);
+  margin-bottom: 10px;
+}
+
+.card-header p {
+  font-size: 1rem;
+  color: var(--font-color);
+  margin-bottom: 15px;
+}
+
+.card-body p {
+  font-size: var(--description-font-size);
+  color: #e0e0e0;
+  margin-bottom: 0;
+}
+
+.experience-card .card-header, .experience-card .card-body {
+  padding: 0 15px;
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+  #experience {
+    padding: 40px 10px;
+  }
+
+  .section-title h2 {
+    font-size: 2rem;
+  }
+
+  .experience-cards {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .experience-card {
+    width: 90%;
+    height: auto;
+    max-width: 350px;
+  }
+
+  .card-header h3 {
+    font-size: 1.6rem;
+  }
+
+  .card-body p {
+    font-size: 0.9rem;
+  }
+}
+</style>
+
+</style>
+
+    
+  </div>
+  
+  
+  
+    <!-- Contact Section -->
+    <div id="contact" class="section">
+        <div>
+            <h1>Contact Me</h1>
+            <p>Email: mithunsarkar.123malda@gmail.com</p>
+        </div>
+    </div>
+
+    <script>
+        // Scroll-based Gradient Background Change (Smooth and Premium)
+        window.addEventListener('scroll', function () {
+            const scrollY = window.scrollY;
+            const body = document.querySelector('body');
+            const gradientMove = (scrollY * 0.1) % 360;
+            document.querySelector('.background').style.background = `linear-gradient(${gradientMove}deg, #000000, #4b0082)`;
+        });
+
+        // Scroll Animation
+        const sections = document.querySelectorAll(".section, .edu-card, .project-card, .skill-card,  experience");
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("show");
+                }
+            });
+        }, { threshold: 0.2 });
+
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+
+        // Responsive Toggle Menu
+        function toggleMenu() {
+            document.querySelector(".nav-links").classList.toggle("show");
+        }
+    </script>
+
+</body>
+</html>
+<!-- Dynamic Island Internet Notification -->
+<div id="dynamic-island" class="dynamic-island">
+    <div class="island-content">
+        <span id="island-text">⚠ No Internet Connection</span>
+    </div>
+</div>
+
+<audio id="alert-sound" src="alert.mp3"></audio> <!-- Add your alert sound file -->
+
+<style>
+    /* Dynamic Island Notification */
+    .dynamic-island {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 250px;
+        height: 50px;
+        background: rgba(0, 0, 0, 0.9);
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 25px;
+        font-size: 16px;
+        font-weight: bold;
+        opacity: 0;
+        transition: all 0.5s ease-in-out;
+        z-index: 10000;
+    }
+
+    .dynamic-island.show {
+        opacity: 1;
+        width: 300px;
+        height: 55px;
+    }
+
+    .dynamic-island.offline {
+        background: rgba(255, 0, 0, 0.9);
+        box-shadow: 0 0 20px red;
+    }
+
+    .dynamic-island.online {
+        background: rgba(0, 255, 0, 0.9);
+        box-shadow: 0 0 20px lime;
+    }
+</style>
+
+<script>
+    function checkInternet() {
+        const dynamicIsland = document.getElementById("dynamic-island");
+        const islandText = document.getElementById("island-text");
+        const alertSound = document.getElementById("alert-sound");
+
+        if (!navigator.onLine) {
+            dynamicIsland.classList.add("show", "offline");
+            dynamicIsland.classList.remove("online");
+            islandText.innerHTML = "⚠ No Internet Connection";
+            alertSound.play();
+        } else {
+            dynamicIsland.classList.add("show", "online");
+            dynamicIsland.classList.remove("offline");
+            islandText.innerHTML = "✅ Connected to Internet";
+            
+            setTimeout(() => {
+                dynamicIsland.classList.remove("show");
+            }, 3000); // Auto-hide after 3 sec
+        }
+    }
+
+    window.addEventListener("load", checkInternet);
+    window.addEventListener("online", checkInternet);
+    window.addEventListener("offline", checkInternet);
+</script>
+
+
+
+
+
+
+
+
+<footer class="footer">
+    <div class="social-icons">
+        <a href="#" title="LinkedIn">🔗</a>
+        <a href="#" title="GitHub">🐱</a>
+        <a href="#" title="Twitter">🐦</a>
+        <a href="#" title="Facebook">📘</a>
+        <a href="ai.html">🫧</a>
+    </div>
+    <p>© <span id="year"></span> Barshan Sarkar. All Rights Reserved. v - 1.0</p>
+    <button class="back-to-top" onclick="scrollToTop()">↑</button>
+</footer>
+<style>
+  /* Premium Footer Styles */
+.footer {
+    position: relative;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    padding: 20px 50px;
+    text-align: center;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+}
+
+/* Social Media Icons */
+.social-icons {
+    margin: 15px 0;
+}
+
+.social-icons a {
+    display: inline-block;
+    margin: 0 10px;
+    font-size: 24px;
+    color: #ffffff;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.social-icons a:hover {
+    transform: scale(1.2);
+    text-shadow: 0 0 10px #ffffff, 0 0 20px #00aaff;
+}
+
+/* Copyright */
+.footer p {
+    margin: 0;
+    font-size: 14px;
+}
+
+/* Back to Top Button */
+.back-to-top {
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    color: white;
+    font-size: 18px;
+    transition: all 0.3s ease;
+}
+
+.back-to-top:hover {
+    background: #00aaff;
+    box-shadow: 0 0 10px #00aaff;
+}
+
+</style>
+<script>
+    // Dynamic Year Update
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // Smooth Scroll to Top
+    function scrollToTop() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+</script>

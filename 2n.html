@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My CSS Framework</title>
+    <style>
+        /* Grid System */
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            margin: -10px;
+        }
+
+        [class*="col-"] {
+            padding: 10px;
+            flex: 1;
+        }
+
+        .col-1 { flex: 0 0 8.33%; max-width: 8.33%; }
+        .col-2 { flex: 0 0 16.66%; max-width: 16.66%; }
+        .col-3 { flex: 0 0 25%; max-width: 25%; }
+        .col-4 { flex: 0 0 33.33%; max-width: 33.33%; }
+        .col-6 { flex: 0 0 50%; max-width: 50%; }
+        .col-12 { flex: 0 0 100%; max-width: 100%; }
+
+        @media (max-width: 768px) {
+            .col-md-6 { flex: 0 0 50%; max-width: 50%; }
+            .col-md-12 { flex: 0 0 100%; max-width: 100%; }
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-primary {
+            background: #007bff;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: #0056b3;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #007bff;
+            color: #007bff;
+        }
+
+        .btn-outline:hover {
+            background: #007bff;
+            color: #fff;
+        }
+
+        /* Utility Classes */
+        .text-center { text-align: center; }
+        .text-left { text-align: left; }
+        .text-right { text-align: right; }
+
+        .mt-10 { margin-top: 10px; }
+        .mb-10 { margin-bottom: 10px; }
+        .p-10 { padding: 10px; }
+
+        .bg-primary { background: #007bff; color: white; }
+        .bg-secondary { background: #6c757d; color: white; }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: #333;
+            color: white;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+        }
+
+        .navbar a:hover {
+            color: #007bff;
+        }
+
+        /* Responsive Menu */
+        .menu-toggle {
+            display: none;
+            cursor: pointer;
+            font-size: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                width: 100%;
+                background: #222;
+                text-align: center;
+            }
+
+            .nav-links a {
+                padding: 10px;
+                display: block;
+                border-bottom: 1px solid #444;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="#">Logo</a>
+        <div class="menu-toggle">☰</div>
+        <div class="nav-links">
+            <a href="#">Home</a>
+            <a href="#">About</a>
+            <a href="#">Contact</a>
+        </div>
+    </nav>
+
+    <!-- Container with Grid System -->
+    <div class="container">
+        <div class="row">
+            <div class="col-6 bg-primary p-1">Column 1</div>
+            <div class="col-6 bg-secondary p-10">Column 2</div>
+        </div>
+        <button class="btn btn-primary mt-18">Click Me</button>
+    </div>
+
+    <script>
+        // JavaScript for Mobile Menu Toggle
+        document.addEventListener("DOMContentLoaded", function () {
+            let menuToggle = document.querySelector(".menu-toggle");
+            let navLinks = document.querySelector(".nav-links");
+
+            menuToggle.addEventListener("click", function () {
+                navLinks.classList.toggle("active");
+            });
+        });
+    </script>
+
+</body>
+</html>
